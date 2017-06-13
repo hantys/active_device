@@ -34,9 +34,13 @@ require 'active_device/helper'
 module ActiveDevice
 
   include ActiveDevice::Helper
-  
+
   def self.included(base)
-    base.before_filter :set_mobile_format
+    if Rails::VERSION::MAJOR >= 5 && Rails::VERSION::MINOR >= 1
+      base.before_action :set_mobile_format
+    else
+      base.before_filter :set_mobile_format
+    end
     base.helper_method :is_mobile_device?, :is_mobile_browser?, :is_desktop_browser?, :is_bot?
     base.helper_method :is_mobile_view?
     base.helper_method :is_device?, :is_handset?, :is_brand?, :is_model?, :is_os?, :is_engine?, :is_browser?
